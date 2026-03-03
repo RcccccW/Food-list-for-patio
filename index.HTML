@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>肾炎饮食查询</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f8f7;
+  text-align: center;
+  padding: 30px;
+}
+h1 {
+  color: #2e7d32;
+}
+input {
+  padding: 12px;
+  font-size: 18px;
+  width: 220px;
+}
+button {
+  padding: 12px 18px;
+  font-size: 18px;
+  background-color: #2e7d32;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+.result {
+  margin-top: 30px;
+  font-size: 20px;
+}
+.low { color: green; }
+.medium { color: orange; }
+.high { color: red; }
+.notice {
+  margin-top: 40px;
+  font-size: 14px;
+  color: gray;
+}
+</style>
+</head>
+<body>
+
+<h1>肾炎患者食物钾含量查询</h1>
+
+<input type="text" id="foodInput" placeholder="输入食物名称">
+<button onclick="searchFood()">查询</button>
+
+<div class="result" id="result"></div>
+
+<div class="notice">
+⚠ 本网站仅供参考，不替代医生建议。
+</div>
+
+<script>
+const foods = [
+  // 水果
+  {name:"香蕉", potassium:358},
+  {name:"苹果", potassium:107},
+  {name:"梨", potassium:119},
+  {name:"橙子", potassium:181},
+  {name:"猕猴桃", potassium:312},
+  {name:"西瓜", potassium:112},
+  {name:"葡萄", potassium:191},
+  {name:"草莓", potassium:153},
+  {name:"牛油果", potassium:485},
+  {name:"芒果", potassium:168},
+  {name:"樱桃", potassium:222},
+  {name:"蓝莓", potassium:77},
+
+  // 蔬菜
+  {name:"菠菜", potassium:558},
+  {name:"生菜", potassium:194},
+  {name:"西红柿", potassium:237},
+  {name:"黄瓜", potassium:147},
+  {name:"土豆", potassium:425},
+  {name:"胡萝卜", potassium:320},
+  {name:"西兰花", potassium:316},
+  {name:"茄子", potassium:229},
+  {name:"冬瓜", potassium:78},
+  {name:"南瓜", potassium:340},
+  {name:"青椒", potassium:220},
+  {name:"菜花", potassium:200},
+  {name:"苦瓜", potassium:311},
+  {name:"红薯", potassium:290},
+  {name:"山药", potassium:426},
+  {name:"白萝卜", potassium:148},  
+  {name:"洋葱", potassium:114},
+  {name:"大蒜", potassium:540},
+  {name:"绿豆芽", potassium:114},
+
+
+  // 主食
+  {name:"米饭", potassium:26},
+  {name:"面条", potassium:44},
+  {name:"馒头", potassium:138},
+  {name:"红薯", potassium:337},
+  {name:"玉米", potassium:270},
+
+  // 肉类
+  {name:"鸡胸肉", potassium:256},
+  {name:"猪肉", potassium:242},
+  {name:"牛肉", potassium:318},
+  {name:"鱼肉", potassium:361},
+  {name:"虾", potassium:259},
+
+  // 豆制品
+  {name:"豆腐", potassium:121},
+  {name:"豆浆", potassium:48},
+  {name:"黄豆", potassium:1500},
+
+  // 坚果
+  {name:"花生", potassium:705},
+  {name:"杏仁", potassium:733},
+  {name:"核桃", potassium:441}
+];
+
+function getLevel(potassium) {
+  if (potassium < 150) return {text: "🟢 低钾（相对安全）", class: "low"};
+  if (potassium <= 250) return {text: "🟡 中钾（适量）", class: "medium"};
+  return {text: "🔴 高钾（需控制）", class: "high"};
+}
+
+function searchFood() {
+  const input = document.getElementById("foodInput").value.trim();
+  const resultDiv = document.getElementById("result");
+
+  if (!input) {
+    resultDiv.innerHTML = "请输入食物名称";
+    return;
+  }
+
+  const results = foods.filter(food => 
+    food.name.includes(input)
+  );
+
+  if (results.length === 0) {
+    resultDiv.innerHTML = "未找到该食物";
+    return;
+  }
+
+  let html = "";
+
+  results.forEach(food => {
+    const level = getLevel(food.potassium);
+    html += `
+      <div style="margin-bottom:20px;">
+        <p><strong>${food.name}</strong></p>
+        <p>钾含量：${food.potassium} mg / 100g</p>
+        <p class="${level.class}">${level.text}</p>
+      </div>
+    `;
+  });
+
+  resultDiv.innerHTML = html;
+}
+</script>
+
+</body>
+</html>
